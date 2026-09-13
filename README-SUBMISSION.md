@@ -21,7 +21,7 @@ This submission covers both assessment tracks:
 
 ## DevOps artifacts
 
-- `.github/workflows/ci.yml` runs install, lint, typecheck, build, and unit tests on pushes and pull requests.
+- `.github/workflows/ci.yml` runs install, lint, typecheck, build, Docker image, unit-test, Compose startup, and k6 checks on pushes and pull requests.
 - `devops/ci-notes.md` explains the pipeline and a path toward continuous deployment.
 - `devops/environment-notes.md` documents development, staging, and testing configuration.
 - `devops/deployment-runbook.md` covers deployment, health checks, rollback, and common failures.
