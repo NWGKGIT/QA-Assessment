@@ -40,6 +40,13 @@ export class TransactionsService {
           `Product with ID ${dto.productId} not found`,
         );
 
+      // Check product availability
+      if (product.status === ProductStatus.OUT_OF_STOCK) {
+        throw new ConflictException(
+          `Product with ID ${dto.productId} is out of stock`,
+        );
+      }
+
       // Check quantity availability
       if (dto.quantity > product.quantity) {
         throw new ConflictException(
