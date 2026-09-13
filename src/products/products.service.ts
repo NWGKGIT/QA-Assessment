@@ -108,7 +108,7 @@ export class ProductsService {
 
     try {
       product.name = dto.name ?? product.name;
-      product.price = dto.quantity ?? product.price;
+      product.price = dto.price ?? product.price;
       product.quantity = dto.quantity ?? product.quantity;
       product.status = dto.status ?? product.status;
 
