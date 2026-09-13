@@ -6,7 +6,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, QueryFailedError } from 'typeorm';
+import { DataSource, Repository, QueryFailedError } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { User } from '../users/entities/user.entity';
@@ -22,54 +22,59 @@ export class TransactionsService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(dto: CreateTransactionDto): Promise<ApiResponse<Transaction>> {
+    // Pre-flight lookups (outside the DB transaction — read-only, safe to retry)
+    const user = await this.userRepository.findOne({
+      where: { id: dto.userId },
+    });
+    if (!user)
+      throw new NotFoundException(`User with ID ${dto.userId} not found`);
+
+    const product = await this.productRepository.findOne({
+      where: { id: dto.productId },
+    });
+    if (!product)
+      throw new NotFoundException(
+        `Product with ID ${dto.productId} not found`,
+      );
+
+    // Check product availability
+    if (product.status === ProductStatus.OUT_OF_STOCK) {
+      throw new ConflictException(
+        `Product with ID ${dto.productId} is out of stock`,
+      );
+    }
+
+    // Check quantity availability
+    if (dto.quantity > product.quantity) {
+      throw new ConflictException(
+        `Requested quantity (${dto.quantity}) exceeds available stock (${product.quantity})`,
+      );
+    }
+
+    // Wrap both writes in a single atomic DB transaction
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      const user = await this.userRepository.findOne({
-        where: { id: dto.userId },
-      });
-      if (!user)
-        throw new NotFoundException(`User with ID ${dto.userId} not found`);
-
-      const product = await this.productRepository.findOne({
-        where: { id: dto.productId },
-      });
-      if (!product)
-        throw new NotFoundException(
-          `Product with ID ${dto.productId} not found`,
-        );
-
-      // Check product availability
-      if (product.status === ProductStatus.OUT_OF_STOCK) {
-        throw new ConflictException(
-          `Product with ID ${dto.productId} is out of stock`,
-        );
-      }
-
-      // Check quantity availability
-      if (dto.quantity > product.quantity) {
-        throw new ConflictException(
-          `Requested quantity (${dto.quantity}) exceeds available stock (${product.quantity})`,
-        );
-      }
-
-      // Create transaction
-      const transaction = this.transactionRepository.create({
+      const transaction = queryRunner.manager.create(Transaction, {
         user,
         product,
         quantity: dto.quantity,
       });
-
-      // Save transaction
-      const savedTransaction =
-        await this.transactionRepository.save(transaction);
+      const savedTransaction = await queryRunner.manager.save(transaction);
 
       product.quantity -= dto.quantity;
       if (product.quantity <= 0) {
         product.status = ProductStatus.OUT_OF_STOCK;
       }
-      await this.productRepository.save(product);
+      await queryRunner.manager.save(product);
+
+      await queryRunner.commitTransaction();
 
       return {
         statusCode: HttpStatus.CREATED,
@@ -77,6 +82,7 @@ export class TransactionsService {
         data: savedTransaction,
       };
     } catch (error: unknown) {
+      await queryRunner.rollbackTransaction();
       if (
         error instanceof NotFoundException ||
         error instanceof ConflictException
@@ -96,6 +102,8 @@ export class TransactionsService {
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    } finally {
+      await queryRunner.release();
     }
   }
 
