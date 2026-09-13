@@ -30,11 +30,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Build Docker image
-        run: docker build --tag ella-api:${{ github.sha }} .
-
       - name: Unit tests
         run: npm test -- --runInBand
+
+      - name: Build Docker image
+        run: docker build --tag ella-api:${{ github.sha }} .
 
   integration:
     needs: quality
