@@ -5,7 +5,7 @@ export class Migration1789324328927 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TYPE "public"."product_status_enum" AS ENUM('FOR_SALE', 'OUT_OF_STOCK')`,
+      `CREATE TYPE IF NOT EXISTS "public"."product_status_enum" AS ENUM('FOR_SALE', 'OUT_OF_STOCK')`,
     );
     await queryRunner.query(
       `CREATE TABLE "product" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "price" numeric NOT NULL, "quantity" integer NOT NULL, "status" "public"."product_status_enum" NOT NULL DEFAULT 'FOR_SALE', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_22cc43e9a74d7498546e9a63e77" UNIQUE ("name"), CONSTRAINT "PK_bebc9158e480b949565b4dc7a82" PRIMARY KEY ("id"))`,
