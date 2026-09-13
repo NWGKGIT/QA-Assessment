@@ -7,17 +7,13 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-
-FROM node:20-alpine
+FROM node:20-alpine AS runtime
 WORKDIR /app
+ENV NODE_ENV=production
 
-
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 
-COPY .env ./
-
 EXPOSE 4000
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]
