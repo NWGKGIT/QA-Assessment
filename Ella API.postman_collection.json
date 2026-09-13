@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "59a7db56-71be-49a8-8354-b52811bc7fb0",
+    "_postman_id": "f933ff25-8197-425a-bfb7-31bbf1a77555",
     "name": "Ella API",
     "description": "Ella API documentation for Products, Users, Transactions",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -22,12 +22,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                ""
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": [""]
             }
           },
           "response": [
@@ -43,12 +39,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    ""
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": [""]
                 }
               },
               "status": "OK",
@@ -74,23 +66,18 @@
           "name": "{id}",
           "item": [
             {
-              "name": "Users Controller find One",
+              "name": "Get a user by id",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/users/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "users",
-                    ":id"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users", ":id"],
                   "variable": [
                     {
                       "key": "id",
-                      "value": "string"
+                      "value": "1"
                     }
                   ]
                 }
@@ -103,17 +90,12 @@
                     "header": [],
                     "url": {
                       "raw": "{{baseUrl}}/users/:id",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "users",
-                        ":id"
-                      ],
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
                       "variable": [
                         {
                           "key": "id",
-                          "value": "string"
+                          "value": "1"
                         }
                       ]
                     }
@@ -124,11 +106,35 @@
                   "header": [],
                   "cookie": [],
                   "body": null
+                },
+                {
+                  "name": "User not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/users/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
                 }
               ]
             },
             {
-              "name": "Users Controller update",
+              "name": "Update a user",
               "request": {
                 "method": "PUT",
                 "header": [
@@ -139,7 +145,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"string\",\n  \"email\": \"string\"\n}",
+                  "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -149,17 +155,12 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/users/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "users",
-                    ":id"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users", ":id"],
                   "variable": [
                     {
                       "key": "id",
-                      "value": "string"
+                      "value": "1"
                     }
                   ]
                 }
@@ -177,7 +178,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"name\": \"string\",\n  \"email\": \"string\"\n}",
+                      "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -187,17 +188,12 @@
                     },
                     "url": {
                       "raw": "{{baseUrl}}/users/:id",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "users",
-                        ":id"
-                      ],
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
                       "variable": [
                         {
                           "key": "id",
-                          "value": "string"
+                          "value": "1"
                         }
                       ]
                     }
@@ -208,13 +204,130 @@
                   "header": [],
                   "cookie": [],
                   "body": null
+                },
+                {
+                  "name": "Invalid user input",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/users/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "User not found",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/users/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Email already exists",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/users/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["users", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
                 }
               ]
             }
           ]
         },
         {
-          "name": "Users Controller create",
+          "name": "Create a user",
           "request": {
             "method": "POST",
             "header": [
@@ -225,7 +338,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"string\",\n  \"email\": \"string\"\n}",
+              "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -235,17 +348,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/users",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
             }
           },
           "response": [
             {
-              "name": "201",
+              "name": "User created successfully",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -256,7 +365,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"string\",\n  \"email\": \"string\"\n}",
+                  "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -266,12 +375,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/users",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "users"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users"]
                 }
               },
               "status": "Created",
@@ -280,22 +385,84 @@
               "header": [],
               "cookie": [],
               "body": null
+            },
+            {
+              "name": "Invalid user input",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Email already exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
             }
           ]
         },
         {
-          "name": "Users Controller find All",
+          "name": "List users",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
             }
           },
           "response": [
@@ -306,12 +473,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/users",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "users"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["users"]
                 }
               },
               "status": "OK",
@@ -332,23 +495,18 @@
           "name": "{id}",
           "item": [
             {
-              "name": "Products Controller find One",
+              "name": "Get a product by id",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/products/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "products",
-                    ":id"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products", ":id"],
                   "variable": [
                     {
                       "key": "id",
-                      "value": "string"
+                      "value": "1"
                     }
                   ]
                 }
@@ -361,17 +519,12 @@
                     "header": [],
                     "url": {
                       "raw": "{{baseUrl}}/products/:id",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "products",
-                        ":id"
-                      ],
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
                       "variable": [
                         {
                           "key": "id",
-                          "value": "string"
+                          "value": "1"
                         }
                       ]
                     }
@@ -382,11 +535,35 @@
                   "header": [],
                   "cookie": [],
                   "body": null
+                },
+                {
+                  "name": "Product not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/products/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
                 }
               ]
             },
             {
-              "name": "Products Controller update",
+              "name": "Update a product",
               "request": {
                 "method": "PUT",
                 "header": [
@@ -397,7 +574,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"string\",\n  \"price\": 2984.4672177745692,\n  \"quantity\": 2546.038053180142,\n  \"status\": \"OUT_OF_STOCK\"\n}",
+                  "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -407,17 +584,12 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/products/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "products",
-                    ":id"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products", ":id"],
                   "variable": [
                     {
                       "key": "id",
-                      "value": "string"
+                      "value": "1"
                     }
                   ]
                 }
@@ -435,7 +607,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"name\": \"string\",\n  \"price\": 2984.4672177745692,\n  \"quantity\": 2546.038053180142,\n  \"status\": \"OUT_OF_STOCK\"\n}",
+                      "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -445,17 +617,12 @@
                     },
                     "url": {
                       "raw": "{{baseUrl}}/products/:id",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "products",
-                        ":id"
-                      ],
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
                       "variable": [
                         {
                           "key": "id",
-                          "value": "string"
+                          "value": "1"
                         }
                       ]
                     }
@@ -466,13 +633,130 @@
                   "header": [],
                   "cookie": [],
                   "body": null
+                },
+                {
+                  "name": "Invalid product input",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/products/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Product not found",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/products/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Product name already exists",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/products/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["products", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
                 }
               ]
             }
           ]
         },
         {
-          "name": "Products Controller create",
+          "name": "Create a product",
           "request": {
             "method": "POST",
             "header": [
@@ -483,7 +767,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"string\",\n  \"price\": 2984.4672177745692,\n  \"quantity\": 2546.038053180142,\n  \"status\": \"OUT_OF_STOCK\"\n}",
+              "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -493,17 +777,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/products",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "products"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
             }
           },
           "response": [
             {
-              "name": "201",
+              "name": "Product created successfully",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -514,7 +794,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"string\",\n  \"price\": 2984.4672177745692,\n  \"quantity\": 2546.038053180142,\n  \"status\": \"OUT_OF_STOCK\"\n}",
+                  "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -524,12 +804,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/products",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "products"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products"]
                 }
               },
               "status": "Created",
@@ -538,22 +814,84 @@
               "header": [],
               "cookie": [],
               "body": null
+            },
+            {
+              "name": "Invalid product input",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Product name already exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test Laptop\",\n  \"price\": 1000,\n  \"quantity\": 10,\n  \"status\": \"FOR_SALE\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products"]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
             }
           ]
         },
         {
-          "name": "Products Controller find All",
+          "name": "List products",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/products",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "products"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
             }
           },
           "response": [
@@ -564,12 +902,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/products",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "products"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["products"]
                 }
               },
               "status": "OK",
@@ -590,23 +924,18 @@
           "name": "{id}",
           "item": [
             {
-              "name": "Transactions Controller find One",
+              "name": "Get a transaction by id",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/transactions/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "transactions",
-                    ":id"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["transactions", ":id"],
                   "variable": [
                     {
                       "key": "id",
-                      "value": "string"
+                      "value": "1"
                     }
                   ]
                 }
@@ -619,17 +948,12 @@
                     "header": [],
                     "url": {
                       "raw": "{{baseUrl}}/transactions/:id",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "transactions",
-                        ":id"
-                      ],
+                      "host": ["{{baseUrl}}"],
+                      "path": ["transactions", ":id"],
                       "variable": [
                         {
                           "key": "id",
-                          "value": "string"
+                          "value": "1"
                         }
                       ]
                     }
@@ -640,13 +964,37 @@
                   "header": [],
                   "cookie": [],
                   "body": null
+                },
+                {
+                  "name": "Transaction not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/transactions/:id",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["transactions", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": null
                 }
               ]
             }
           ]
         },
         {
-          "name": "Transactions Controller create",
+          "name": "Create a transaction",
           "request": {
             "method": "POST",
             "header": [
@@ -657,7 +1005,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": 2950.3557685113146,\n  \"productId\": 2256.453122850166,\n  \"quantity\": 5903.842618644002\n}",
+              "raw": "{\n  \"userId\": 1,\n  \"quantity\": 2,\n  \"productId\": 5529.963700084078\n}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -667,17 +1015,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/transactions",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "transactions"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
             }
           },
           "response": [
             {
-              "name": "201",
+              "name": "Transaction created successfully",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -688,7 +1032,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"userId\": 2950.3557685113146,\n  \"productId\": 2256.453122850166,\n  \"quantity\": 5903.842618644002\n}",
+                  "raw": "{\n  \"userId\": 1,\n  \"quantity\": 2,\n  \"productId\": 5529.963700084078\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -698,12 +1042,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/transactions",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "transactions"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["transactions"]
                 }
               },
               "status": "Created",
@@ -712,22 +1052,84 @@
               "header": [],
               "cookie": [],
               "body": null
+            },
+            {
+              "name": "Invalid transaction input",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"quantity\": 2,\n  \"productId\": 5529.963700084078\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transactions",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["transactions"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "User or product not found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"quantity\": 2,\n  \"productId\": 5529.963700084078\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transactions",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["transactions"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": null
             }
           ]
         },
         {
-          "name": "Transactions Controller find All",
+          "name": "List transactions",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/transactions",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "transactions"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
             }
           },
           "response": [
@@ -738,12 +1140,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/transactions",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "transactions"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["transactions"]
                 }
               },
               "status": "OK",
