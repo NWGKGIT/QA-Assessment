@@ -1436,7 +1436,7 @@
           ]
         },
         {
-          "name": "Malformed email regression",
+          "name": "Malformed email returns 400 (BUG-003 fixed)",
           "request": {
             "method": "POST",
             "header": [
@@ -1462,14 +1462,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('current behavior is documented', function () { pm.response.to.have.status(201); });"
+                  "pm.test('returns 400 Bad Request', function () { pm.response.to.have.status(400); });"
                 ]
               }
             }
           ]
         },
         {
-          "name": "Invalid user id regression",
+          "name": "Non-integer user id returns 400 (BUG-004 fixed)",
           "request": {
             "method": "GET",
             "header": [],
@@ -1481,14 +1481,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('current behavior is documented', function () { pm.response.to.have.status(500); });"
+                  "pm.test('returns 400 Bad Request', function () { pm.response.to.have.status(400); });"
                 ]
               }
             }
           ]
         },
         {
-          "name": "Product update price regression",
+          "name": "Product update sets correct price (BUG-001 fixed)",
           "request": {
             "method": "PUT",
             "header": [
@@ -1515,7 +1515,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('returns 200', function () { pm.response.to.have.status(200); });",
-                  "pm.test('current price behavior is documented', function () { pm.expect(String(pm.response.json().data.price)).to.eql('8'); });"
+                  "pm.test('price is updated to 1200', function () { pm.expect(Number(pm.response.json().data.price)).to.eql(1200); });"
                 ]
               }
             }
