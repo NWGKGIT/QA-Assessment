@@ -14,10 +14,10 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.transactions)
+  @ManyToOne(() => User, (user) => user.transactions, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Product, (product) => product.transactions)
+  @ManyToOne(() => Product, (product) => product.transactions, { nullable: false })
   product: Product;
 
   @Column()
