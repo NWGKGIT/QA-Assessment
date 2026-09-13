@@ -54,15 +54,32 @@ jobs:
       - name: Start Docker Compose stack
         run: docker compose up -d --build
 
-      - name: Wait for API
+      - name: Wait for DB to accept connections
         run: |
           for attempt in $(seq 1 30); do
-            if curl --fail --silent http://localhost:4000/; then
+            if docker exec shop-db pg_isready -U "$DB_USERNAME" -d "$DB_DATABASE" > /dev/null 2>&1; then
+              echo "DB ready after ${attempt} attempt(s)"
               exit 0
             fi
-            sleep 2
+            echo "DB not ready yet (attempt ${attempt}/30) — waiting 3s"
+            sleep 3
           done
-          echo "API did not become ready"
+          echo "DB did not become ready in time"
+          docker compose logs db
+          exit 1
+
+      - name: Wait for API
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --max-time 3 http://localhost:4000/; then
+              echo ""
+              echo "API ready after ${attempt} attempt(s)"
+              exit 0
+            fi
+            echo "API not ready yet (attempt ${attempt}/60) — waiting 3s"
+            sleep 3
+          done
+          echo "API did not become ready after 180s"
           exit 1
 
       - name: Run k6 smoke load test
