@@ -25,6 +25,7 @@ This submission covers both assessment tracks:
 - `devops/ci-notes.md` explains the pipeline and a path toward continuous deployment.
 - `devops/environment-notes.md` documents development, staging, and testing configuration.
 - `devops/deployment-runbook.md` covers deployment, health checks, rollback, and common failures.
+- `devops/cloud-deployment-plan.md` provides a beginner VPS or AWS ECS, ECR, RDS, and Secrets Manager deployment plan.
 - `Dockerfile`, `docker-compose.yml`, and `docker-compose.dev.yml` were reviewed and hardened.
 
 ## Validation results
