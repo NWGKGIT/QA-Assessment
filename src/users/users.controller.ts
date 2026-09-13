@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Body, Param, ParseIntPipe } from '@nestjs/c
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/constants';
 import {
   ApiBadRequestResponse,
@@ -49,7 +50,7 @@ export class UsersController {
   @ApiNotFoundResponse({ description: 'User not found' })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: CreateUserDto,
+    @Body() dto: UpdateUserDto,
   ): Promise<ApiResponse<User>> {
     return this.usersService.update(id, dto);
   }

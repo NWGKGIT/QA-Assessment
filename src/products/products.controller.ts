@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Put, ParseIntPipe } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { ApiResponse } from 'src/constants';
@@ -49,7 +50,7 @@ export class ProductsController {
   @ApiNotFoundResponse({ description: 'Product not found' })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: CreateProductDto,
+    @Body() body: UpdateProductDto,
   ): Promise<ApiResponse<Product>> {
     return this.productsService.update(id, body);
   }

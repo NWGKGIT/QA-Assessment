@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, QueryFailedError } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/constants';
 
 @Injectable()
@@ -94,7 +95,7 @@ export class UsersService {
     }
   }
 
-  async update(id: number, dto: CreateUserDto): Promise<ApiResponse<User>> {
+  async update(id: number, dto: UpdateUserDto): Promise<ApiResponse<User>> {
     try {
       const user = await this.userRepository.preload({
         id: id,
