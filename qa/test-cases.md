@@ -31,9 +31,17 @@
 
 ## Execution record
 
-| ID                 | Status      | Evidence / notes                                                                                              |
-| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------- |
-| USR-001 to USR-015 | Not run yet | Requires the API and PostgreSQL database to be running. Results will be recorded after exploratory execution. |
+| ID                 | Status  | Evidence / notes                                                                |
+| ------------------ | ------- | ------------------------------------------------------------------------------- |
+| USR-001            | Passed  | `POST /users` returned HTTP `201` and persisted user 1 with timestamps.         |
+| USR-002            | Passed  | `GET /users` returned HTTP `200` with user 1 and an empty transactions array.   |
+| USR-003            | Passed  | `GET /users/1` returned HTTP `200` with the requested user.                     |
+| USR-004            | Not run | A dedicated user update request remains.                                        |
+| USR-005 to USR-008 | Not run | Validation cases remain to be executed in Postman.                              |
+| USR-009            | Failed  | Invalid email was accepted with HTTP `201`; logged as BUG-003 in `qa/BUGS.md`.  |
+| USR-010 to USR-013 | Not run | Duplicate, missing-user, unknown-field, and update cases remain to be executed. |
+| USR-014            | Failed  | `GET /users/abc` returned HTTP `500` instead of `400`; logged as BUG-004.       |
+| USR-015            | Not run | Duplicate-email update remains to be executed.                                  |
 
 ## Risks identified from the test design
 
