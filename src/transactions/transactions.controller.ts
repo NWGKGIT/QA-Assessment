@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -38,7 +45,9 @@ export class TransactionsController {
   @ApiOperation({ summary: 'Get a transaction by id' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiNotFoundResponse({ description: 'Transaction not found' })
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ApiResponse<Transaction>> {
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Transaction>> {
     return this.transactionsService.findOne(id);
   }
 }

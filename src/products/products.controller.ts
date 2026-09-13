@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
@@ -38,7 +46,9 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get a product by id' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiNotFoundResponse({ description: 'Product not found' })
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ApiResponse<Product>> {
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Product>> {
     return this.productsService.findOne(id);
   }
 
