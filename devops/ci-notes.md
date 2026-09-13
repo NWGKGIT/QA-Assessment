@@ -27,7 +27,7 @@ npm run build
 npm test -- --runInBand
 docker build --tag ella-api:local .
 DB_USERNAME=postgres DB_PASSWORD=postgres DB_DATABASE=ella_ci docker compose up -d --build
-curl --retry 30 --retry-delay 2 --retry-connrefused --fail http://localhost:4000/
+for attempt in $(seq 1 30); do curl --fail --silent http://localhost:4000/ && break; sleep 2; done
 k6 run qa/k6-script.js
 docker compose down --volumes --remove-orphans
 ```
