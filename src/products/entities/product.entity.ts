@@ -7,11 +7,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Transaction } from '../../transactions/entities/transaction.entity';
-
-enum ProductStatus {
-  FOR_SALE = 'FOR_SALE',
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
-}
+import { ProductStatus } from '../../constants';
 
 @Entity()
 export class Product {

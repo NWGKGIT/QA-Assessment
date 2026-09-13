@@ -37,9 +37,7 @@ export class TransactionsService {
       where: { id: dto.productId },
     });
     if (!product)
-      throw new NotFoundException(
-        `Product with ID ${dto.productId} not found`,
-      );
+      throw new NotFoundException(`Product with ID ${dto.productId} not found`);
 
     // Check product availability
     if (product.status === ProductStatus.OUT_OF_STOCK) {

@@ -8,7 +8,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('/')
-  @ApiOperation({ summary: 'Liveness check — returns service status and uptime' })
+  @ApiOperation({
+    summary: 'Liveness check — returns service status and uptime',
+  })
   getHealth(): { status: string; uptime: number; timestamp: string } {
     return this.appService.getHealth();
   }
