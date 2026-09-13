@@ -10,7 +10,10 @@ The workflow in `.github/workflows/ci.yml` runs on every push and pull request. 
 4. Runs the ESLint command with `npm run lint`.
 5. Runs the TypeScript compiler without emitting files with `npm run typecheck`.
 6. Builds the NestJS application with `npm run build`.
-7. Runs the Jest unit tests in-band with `npm test -- --runInBand`.
+7. Builds the Docker image with the commit SHA as its tag.
+8. Runs the Jest unit tests in-band with `npm test -- --runInBand`.
+
+After the quality job passes, a separate integration job starts the full Docker Compose stack with CI-only database credentials, waits for the API root endpoint, runs the k6 smoke-load test, prints service logs on failure, and always removes the containers and volume.
 
 Each command is a separate workflow step. GitHub Actions stops the job when a command exits non-zero, so a lint, typecheck, build, or test failure blocks a passing CI run.
 
@@ -22,6 +25,11 @@ npm run lint
 npm run typecheck
 npm run build
 npm test -- --runInBand
+docker build --tag ella-api:local .
+DB_USERNAME=postgres DB_PASSWORD=postgres DB_DATABASE=ella_ci docker compose up -d --build
+curl --retry 30 --retry-delay 2 --retry-connrefused --fail http://localhost:4000/
+k6 run qa/k6-script.js
+docker compose down --volumes --remove-orphans
 ```
 
 ## Extension toward continuous deployment
