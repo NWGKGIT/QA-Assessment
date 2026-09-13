@@ -38,13 +38,13 @@
 | USR-003            | Passed  | `GET /users/1` returned HTTP `200` with the requested user.                     |
 | USR-004            | Not run | A dedicated user update request remains.                                        |
 | USR-005 to USR-008 | Not run | Validation cases remain to be executed in Postman.                              |
-| USR-009            | Failed  | Invalid email was accepted with HTTP `201`; logged as BUG-003 in `qa/BUGS.md`.  |
+| USR-009            | Fixed   | Was failing (HTTP `201` for invalid email). Fixed by adding `@IsEmail()` to `CreateUserDto` (BUG-003). Now returns `400`. |
 | USR-010 to USR-013 | Not run | Duplicate, missing-user, unknown-field, and update cases remain to be executed. |
-| USR-014            | Failed  | `GET /users/abc` returned HTTP `500` instead of `400`; logged as BUG-004.       |
+| USR-014            | Fixed   | Was failing (`GET /users/abc` returned `500`). Fixed by applying `ParseIntPipe` to controllers (BUG-004). Now returns `400`. |
 | USR-015            | Not run | Duplicate-email update remains to be executed.                                  |
 
-## Risks identified from the test design
+## Risks identified from the test design (updated after fixes)
 
-- `CreateUserDto` validates that email is non-empty but does not validate email format.
-- `GET /users/:id` and `PUT /users/:id` convert route parameters with `Number()` instead of using a validation pipe, so non-numeric ids need explicit testing.
-- The update controller accepts `CreateUserDto` rather than `UpdateUserDto`, so partial-update behavior should be confirmed against the intended acceptance criteria.
+- `CreateUserDto` now validates both email presence and email format via `@IsEmail()` (BUG-003 fixed).
+- `GET /users/:id` and `PUT /users/:id` now use `ParseIntPipe`, returning `400` for non-numeric ids (BUG-004 fixed).
+- The update controller now uses `UpdateUserDto` (PartialType), making all fields optional for partial updates.
