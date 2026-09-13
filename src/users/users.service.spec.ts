@@ -53,7 +53,7 @@ describe('UsersService', () => {
   it('translates a duplicate email database error into a conflict', async () => {
     const duplicateError = Object.assign(
       new QueryFailedError('INSERT', [], new Error('duplicate email')),
-      { code: '23505' },
+      { driverError: { code: '23505' } },
     );
     const dto = { name: 'Ada Lovelace', email: 'ada@example.com' };
 

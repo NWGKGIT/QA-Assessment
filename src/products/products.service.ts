@@ -33,7 +33,7 @@ export class ProductsService {
     } catch (error: unknown) {
       if (
         error instanceof QueryFailedError &&
-        (error as any).code === '23505'
+        (error.driverError as { code?: string }).code === '23505'
       ) {
         throw new ConflictException('Product name already exists');
       }
@@ -123,7 +123,7 @@ export class ProductsService {
       if (error instanceof NotFoundException) throw error;
       if (
         error instanceof QueryFailedError &&
-        (error as any).code === '23505'
+        (error.driverError as { code?: string }).code === '23505'
       ) {
         throw new ConflictException('Product name already exists');
       }

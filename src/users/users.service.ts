@@ -30,7 +30,7 @@ export class UsersService {
     } catch (error: unknown) {
       if (
         error instanceof QueryFailedError &&
-        (error as any).code === '23505'
+        (error.driverError as { code?: string }).code === '23505'
       ) {
         throw new ConflictException('Email already exists');
       }
@@ -116,7 +116,7 @@ export class UsersService {
       if (error instanceof NotFoundException) throw error;
       if (
         error instanceof QueryFailedError &&
-        (error as any).code === '23505'
+        (error.driverError as { code?: string }).code === '23505'
       ) {
         throw new ConflictException('Email already exists');
       }

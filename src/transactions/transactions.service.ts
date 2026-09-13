@@ -77,7 +77,8 @@ export class TransactionsService {
         throw error;
       if (error instanceof QueryFailedError) {
         throw new ConflictException(
-          'Database error: ' + (error as any).message,
+          'Database error: ' +
+            (error.driverError as { message?: string }).message,
         );
       }
       throw new HttpException(
