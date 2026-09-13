@@ -66,27 +66,27 @@ const qaScenarios = {
       ["pm.test('returns 400', function () { pm.response.to.have.status(400); });"],
     ),
     request(
-      'Malformed email regression',
+      'Malformed email returns 400 (BUG-003 fixed)',
       'POST',
       '{{baseUrl}}/users',
       { name: 'Invalid Email', email: 'not-an-email' },
-      ["pm.test('current behavior is documented', function () { pm.response.to.have.status(201); });"],
+      ["pm.test('returns 400 Bad Request', function () { pm.response.to.have.status(400); });"],
     ),
     request(
-      'Invalid user id regression',
+      'Non-integer user id returns 400 (BUG-004 fixed)',
       'GET',
       '{{baseUrl}}/users/abc',
       null,
-      ["pm.test('current behavior is documented', function () { pm.response.to.have.status(500); });"],
+      ["pm.test('returns 400 Bad Request', function () { pm.response.to.have.status(400); });"],
     ),
     request(
-      'Product update price regression',
+      'Product update sets correct price (BUG-001 fixed)',
       'PUT',
       '{{baseUrl}}/products/{{productId}}',
       { name: 'Postman Product Updated', price: 1200, quantity: 8, status: 'FOR_SALE' },
       [
         "pm.test('returns 200', function () { pm.response.to.have.status(200); });",
-        "pm.test('current price behavior is documented', function () { pm.expect(String(pm.response.json().data.price)).to.eql('8'); });",
+        "pm.test('price is updated to 1200', function () { pm.expect(Number(pm.response.json().data.price)).to.eql(1200); });",
       ],
     ),
     request(
