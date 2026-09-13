@@ -106,12 +106,12 @@ export class ProductsService {
     id: number,
     dto: UpdateProductDto,
   ): Promise<ApiResponse<Product>> {
-    const product = await this.productRepository.findOne({ where: { id } });
-    if (!product) {
-      throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-
     try {
+      const product = await this.productRepository.findOne({ where: { id } });
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+      }
+
       product.name = dto.name ?? product.name;
       product.price = dto.price ?? product.price;
 
