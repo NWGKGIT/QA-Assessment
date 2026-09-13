@@ -21,9 +21,13 @@ export class ProductsService {
 
   async create(dto: CreateProductDto): Promise<ApiResponse<Product>> {
     try {
+      const initialStatus =
+        dto.quantity === 0
+          ? ProductStatus.OUT_OF_STOCK
+          : (dto.status ?? ProductStatus.FOR_SALE);
       const product = this.productRepository.create({
         ...dto,
-        status: dto.status || ProductStatus.FOR_SALE,
+        status: initialStatus,
       });
       const savedProduct = await this.productRepository.save(product);
       return {

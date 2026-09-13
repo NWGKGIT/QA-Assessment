@@ -8,7 +8,8 @@ export class CreateProductDto {
   name: string;
 
   @IsNumber()
-  @ApiProperty({ example: 1000 })
+  @Min(0.01, { message: 'Price must be greater than zero' })
+  @ApiProperty({ example: 1000, minimum: 0.01 })
   price: number;
 
   @IsNumber()
