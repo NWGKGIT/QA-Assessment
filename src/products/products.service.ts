@@ -114,8 +114,17 @@ export class ProductsService {
     try {
       product.name = dto.name ?? product.name;
       product.price = dto.price ?? product.price;
-      product.quantity = dto.quantity ?? product.quantity;
-      product.status = dto.status ?? product.status;
+
+      const newQty = dto.quantity ?? product.quantity;
+      product.quantity = newQty;
+
+      // Auto-restore FOR_SALE when restocking an OUT_OF_STOCK product,
+      // unless the caller explicitly sets a different status.
+      if (dto.status !== undefined) {
+        product.status = dto.status;
+      } else if (newQty > 0 && product.status === ProductStatus.OUT_OF_STOCK) {
+        product.status = ProductStatus.FOR_SALE;
+      }
 
       const updatedProduct = await this.productRepository.save(product);
 
