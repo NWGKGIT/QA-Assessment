@@ -21,7 +21,7 @@ import { AppController } from './app.controller';
       database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       synchronize: false,
-      migrations: ['dist/migrations/*.js'],
+      migrations: ['dist/src/migrations/*.js'],
       migrationsRun: true,
     }),
     UsersModule,
