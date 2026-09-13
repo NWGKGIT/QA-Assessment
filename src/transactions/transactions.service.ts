@@ -58,8 +58,8 @@ export class TransactionsService {
       const savedTransaction =
         await this.transactionRepository.save(transaction);
 
-      product.quantity += dto.quantity;
-      if (product.quantity === 0) {
+      product.quantity -= dto.quantity;
+      if (product.quantity <= 0) {
         product.status = ProductStatus.OUT_OF_STOCK;
       }
       await this.productRepository.save(product);
