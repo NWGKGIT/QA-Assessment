@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, ParseIntPipe } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
@@ -37,8 +37,8 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get a product by id' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiNotFoundResponse({ description: 'Product not found' })
-  async findOne(@Param('id') id: string): Promise<ApiResponse<Product>> {
-    return this.productsService.findOne(Number(id));
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ApiResponse<Product>> {
+    return this.productsService.findOne(id);
   }
 
   @Put(':id')
@@ -48,9 +48,9 @@ export class ProductsController {
   @ApiConflictResponse({ description: 'Product name already exists' })
   @ApiNotFoundResponse({ description: 'Product not found' })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: CreateProductDto,
   ): Promise<ApiResponse<Product>> {
-    return this.productsService.update(Number(id), body);
+    return this.productsService.update(id, body);
   }
 }
