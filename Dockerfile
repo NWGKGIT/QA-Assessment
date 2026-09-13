@@ -2,11 +2,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-
-RUN npm install typeorm@^0.3.27 --legacy-peer-deps
-
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
 RUN npm run build
 
