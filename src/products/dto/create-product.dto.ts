@@ -1,10 +1,11 @@
-import { IsString, IsNumber, IsOptional, Min, IsEnum } from 'class-validator';
+import { IsString, IsNumber, IsOptional, Min, IsEnum, MaxLength } from 'class-validator';
 import { ProductStatus } from 'src/constants';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateProductDto {
-  @ApiProperty({ example: 'Test Laptop' })
+  @ApiProperty({ example: 'Test Laptop', maxLength: 200 })
   @IsString()
+  @MaxLength(200)
   name: string;
 
   @IsNumber()
