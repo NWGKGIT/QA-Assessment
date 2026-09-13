@@ -17,7 +17,9 @@ export class Transaction {
   @ManyToOne(() => User, (user) => user.transactions, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Product, (product) => product.transactions, { nullable: false })
+  @ManyToOne(() => Product, (product) => product.transactions, {
+    nullable: false,
+  })
   product: Product;
 
   @Column()
