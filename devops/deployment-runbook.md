@@ -105,6 +105,24 @@ npm run migration:run
 
 **Fix:** Stop the conflicting process or change the host-side port mapping while keeping the container port and database connection settings consistent.
 
+### API starts but is unreachable from the host
+
+**Symptom:** The container shows as healthy, `docker compose logs api` shows "Nest application successfully started", but `curl http://localhost:4000/` returns connection refused.
+
+**Fix:** The application must bind to `0.0.0.0`, not `127.0.0.1`. Ensure `app.listen(port, '0.0.0.0')` in `src/main.ts`. Binding only to loopback means Docker's port-mapping (which delivers traffic to the container's `eth0` interface) never reaches the application.
+
+### Application exits after ~30 s without connecting to the database
+
+**Symptom:** Container exits with an unhandled error after repeated "Unable to connect to the database. Retrying (N)..." log lines.
+
+**Fix:** NestJS TypeORM defaults to `retryAttempts: 10`. If the database is slow to accept connections (cold start, volume initialisation), the app exhausts retries and crashes. Increase `retryAttempts` and `retryDelay` in the TypeORM configuration.
+
 ## Monitoring approach
 
-For a running environment, collect structured API and database container logs centrally, alert on repeated restarts and failed health checks, and monitor CPU, memory, disk, database connections, and response latency. The current Compose health checks provide a basic liveness signal; a future `/health` endpoint should include database readiness separately.
+The root endpoint `GET /` returns a structured health response:
+
+```json
+{ "status": "ok", "uptime": 42.3, "timestamp": "2026-09-14T00:00:00.000Z" }
+```
+
+For a running environment, collect structured API and database container logs centrally, alert on repeated restarts and failed health checks, and monitor CPU, memory, disk, database connections, and response latency. The current Compose health checks provide a basic liveness signal. A future `/health` endpoint should add database ping and migration status as separate fields for a richer readiness check.

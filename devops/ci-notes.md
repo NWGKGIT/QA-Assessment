@@ -2,20 +2,45 @@
 
 ## Current pipeline
 
-The workflow in `.github/workflows/ci.yml` runs on every push and pull request. It:
+The workflow in `.github/workflows/ci.yml` runs on every push and pull request and is split into two jobs.
 
-1. Checks out the repository.
-2. Sets up Node.js 20 with npm caching.
-3. Installs the locked dependency tree with `npm ci`.
-4. Runs the ESLint command with `npm run lint`.
-5. Runs the TypeScript compiler without emitting files with `npm run typecheck`.
-6. Builds the NestJS application with `npm run build`.
-7. Builds the Docker image with the commit SHA as its tag.
-8. Runs the Jest unit tests in-band with `npm test -- --runInBand`.
+### quality job
 
-After the quality job passes, a separate integration job starts the full Docker Compose stack with CI-only database credentials, waits for the API root endpoint, runs the k6 smoke-load test, prints service logs on failure, and always removes the containers and volume.
+1. Check out repository.
+2. Set up Node.js 20 with npm caching.
+3. Install locked dependency tree with `npm ci`.
+4. Run ESLint (`npm run lint`).
+5. Run TypeScript compiler without emitting (`npm run typecheck`).
+6. Build the NestJS application (`npm run build`).
+7. Run Jest unit tests in-band (`npm test -- --runInBand`).
+8. Build the Docker image and tag it `ella-api:ci`.
+9. Export the image as a gzipped tar and upload it as a workflow artifact (retention: 1 day).
 
-Each command is a separate workflow step. GitHub Actions stops the job when a command exits non-zero, so a lint, typecheck, build, or test failure blocks a passing CI run.
+### integration job (runs after quality passes)
+
+1. Check out repository.
+2. Install k6.
+3. Download the Docker image artifact from the quality job.
+4. Load the image into the local Docker daemon (`docker load`).
+5. Start the stack with `docker compose up -d` (no `--build` — uses the pre-loaded image).
+6. Wait for DB: poll `pg_isready` via `docker exec` up to 30 × 3 s = 90 s.
+7. Wait for API: poll `curl http://localhost:4000/` up to 60 × 3 s = 180 s.
+8. Run `k6 run qa/k6-script.js`.
+9. Print full container logs on failure for instant diagnosis.
+10. Always tear down containers and volumes.
+
+The build-once / load approach ensures the integration job tests the **exact image** that passed all quality checks, rather than rebuilding from a possibly different layer cache state.
+
+Each step is a separate workflow step. GitHub Actions stops the job when a command exits non-zero, so any lint, typecheck, build, or test failure blocks the run.
+
+## Bugs found and fixed during CI setup
+
+| Bug | Symptom | Fix |
+|-----|---------|-----|
+| `app.listen(port)` binds to `127.0.0.1` | Docker port-mapping delivers traffic to `eth0`, not loopback — API unreachable from host | `app.listen(port, '0.0.0.0')` |
+| TypeORM default `retryAttempts: 10` | App exited after 30 s if DB wasn't ready; container stayed up but process was dead | `retryAttempts: 20, retryDelay: 3000` |
+| `CREATE TYPE IF NOT EXISTS` is invalid SQL | PostgreSQL doesn't have this syntax — migration failed with `42601 syntax error at "NOT"` | Replaced with `DO $$ BEGIN ... EXCEPTION WHEN duplicate_object THEN NULL; END $$` |
+| Docker image not shared between runners | quality built `ella-api:SHA` on runner A; integration runner B didn't have it | Build-once artifact upload/download pattern |
 
 ## Local equivalent
 
@@ -25,15 +50,17 @@ npm run lint
 npm run typecheck
 npm run build
 npm test -- --runInBand
-docker build --tag ella-api:local .
-DB_USERNAME=postgres DB_PASSWORD=postgres DB_DATABASE=ella_ci docker compose up -d --build
-for attempt in $(seq 1 30); do curl --fail --silent http://localhost:4000/ && break; sleep 2; done
+docker build --tag ella-api:ci .
+DB_USERNAME=postgres DB_PASSWORD=postgres DB_DATABASE=ella_ci docker compose up -d
+curl --retry 30 --retry-delay 3 --retry-connrefused http://localhost:4000/
 k6 run qa/k6-script.js
 docker compose down --volumes --remove-orphans
 ```
 
 ## Extension toward continuous deployment
 
-After CI passes on the default branch, a separate deployment job could build the Docker image, tag it with the commit SHA, and push it to a private registry such as Amazon ECR. A protected deployment environment would then update the runtime service, wait for the application and database health checks, and stop the rollout if the new revision does not become healthy. Production credentials should come from GitHub Actions secrets or an OIDC trust relationship, not from repository files.
+After the quality job passes on the default branch, the workflow artifact (the Docker image tar) can be loaded into a deployment job that re-tags the image with the commit SHA, pushes it to a private registry (Amazon ECR, GCR, GHCR), and updates the runtime service (ECS task, Cloud Run revision, Kubernetes deployment). A protected GitHub Actions environment with required reviewers can gate production pushes.
 
-A later improvement would be to keep deployment approval separate from the build job so pull requests can validate the image without receiving production credentials.
+The integration job's health-check pattern (wait for DB → wait for API → run smoke test) is a template for a post-deployment smoke test that confirms the new revision is serving traffic before the old one is removed.
+
+Production credentials should come from GitHub Actions secrets or an OIDC trust relationship with the cloud provider, not from repository files.
