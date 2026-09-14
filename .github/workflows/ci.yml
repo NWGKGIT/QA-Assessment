@@ -33,8 +33,17 @@ jobs:
       - name: Unit tests
         run: npm test -- --runInBand
 
-      - name: Build Docker image
-        run: docker build --tag ella-api:${{ github.sha }} .
+      - name: Build and export Docker image
+        run: |
+          docker build --tag ella-api:ci .
+          docker save ella-api:ci | gzip > /tmp/ella-api.tar.gz
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ella-api-image
+          path: /tmp/ella-api.tar.gz
+          retention-days: 1
 
   integration:
     needs: quality
@@ -51,8 +60,17 @@ jobs:
       - name: Set up k6
         uses: grafana/setup-k6-action@v1
 
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ella-api-image
+          path: /tmp
+
+      - name: Load Docker image
+        run: docker load < /tmp/ella-api.tar.gz
+
       - name: Start Docker Compose stack
-        run: docker compose up -d --build
+        run: docker compose up -d
 
       - name: Wait for DB to accept connections
         run: |

@@ -20,6 +20,7 @@ services:
 
   api:
     build: .
+    image: ella-api:ci
     container_name: shop-api
     restart: always
     environment:
